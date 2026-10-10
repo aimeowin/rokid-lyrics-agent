@@ -153,8 +153,7 @@ export default {
       if (!d) { this.setData({ status: 'dbg: no snap' }); return; }
       const pm = interpolate(d, this.receivedAt, Date.now());
       const idx = currentIndex(d.lines, pm);
-      this.setData({ status: 'dbg ' + this.curMode + ' i=' + idx + ' t=' + Math.round(pm/1000) + 's n=' + (d.lines ? d.lines.length : -1) });
-      if (this.curMode !== 'synced') return;
+            if (this.curMode !== 'synced') return;
       if (idx === this.lastIdx) return;
       this.lastIdx = idx;
       if (idx < 0) {
@@ -178,16 +177,10 @@ export default {
     <text class="title" ink:if="{{ title }}">{{ title }}</text>
     <text class="meta" ink:if="{{ title }}">{{ artist }}{{ paused ? ' · Paused' : '' }}</text>
 
-    <view class="lyrics" ink:if="{{ mode == 'plain' }}">
-      <text class="note">No synced lyrics</text>
-      <text class="plain" ink:for="{{ plain }}" ink:key="*this">{{ item }}</text>
-    </view>
-    <view class="lyrics" ink:else>
-      <text class="prev">{{ prev }}</text>
-      <text class="{{ paused ? 'cur dim' : 'cur' }}">{{ cur }}</text>
-      <text class="next">{{ next }}</text>
-    </view>
-
+    <text class="prev">{{ prev }}</text>
+    <text class="cur">{{ cur }}</text>
+    <text class="next">{{ next }}</text>
+    <text class="note" ink:if="{{ mode == 'plain' }}">{{ plain[0] }}</text>
     <text class="status" ink:if="{{ status }}">{{ status }}</text>
   </view>
 </page>
