@@ -32,7 +32,7 @@ function interpolate(snap, receivedAt, now) {
 
 function lineAt(lines, i) {
   if (!lines || i < 0 || i >= lines.length) return '';
-  return lines[i].text || '♪';
+  return lines[i].text || '...';
 }
 
 function plainPreview(plain) {
@@ -150,12 +150,15 @@ export default {
   tick() {
     try {
       const d = this.snap;
-      if (!d || this.curMode !== 'synced') return;
-      const idx = currentIndex(d.lines, interpolate(d, this.receivedAt, Date.now()));
+      if (!d) { this.setData({ status: 'dbg: no snap' }); return; }
+      const pm = interpolate(d, this.receivedAt, Date.now());
+      const idx = currentIndex(d.lines, pm);
+      this.setData({ status: 'dbg ' + this.curMode + ' i=' + idx + ' t=' + Math.round(pm/1000) + 's n=' + (d.lines ? d.lines.length : -1) });
+      if (this.curMode !== 'synced') return;
       if (idx === this.lastIdx) return;
       this.lastIdx = idx;
       if (idx < 0) {
-        this.setData({ prev: '', cur: '♪', next: lineAt(d.lines, 0) });
+        this.setData({ prev: '', cur: '...', next: lineAt(d.lines, 0) });
       } else {
         this.setData({ prev: lineAt(d.lines, idx - 1), cur: lineAt(d.lines, idx), next: lineAt(d.lines, idx + 1) });
       }
