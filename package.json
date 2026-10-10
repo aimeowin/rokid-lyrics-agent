@@ -1,0 +1,7 @@
+{
+  "name": "lyrics-agent",
+  "version": "1.0.0",
+  "description": "Synced Spotify lyrics on Rokid Glasses (Spotify Web API + LRCLIB)",
+  "main": "app.js",
+  "dependencies": {}
+}
