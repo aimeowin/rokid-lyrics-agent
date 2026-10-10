@@ -56,6 +56,7 @@ export default {
   snap: null,
   receivedAt: 0,
   lastIdx: -2,
+  curMode: 'loading',
 
   data: {
     title: '',
@@ -113,6 +114,7 @@ export default {
       this.snap = d;
       this.receivedAt = now;
       this.lastIdx = -2;
+      this.curMode = 'msg';
       if (d.error === 'not_logged_in') {
         this.setData({ mode: 'msg', title: '', artist: '', prev: '', cur: 'Spotify not connected', next: 'Open /api/login once', status: '' });
         return;
@@ -127,6 +129,7 @@ export default {
       }
       const hasLines = d.lines && d.lines.length > 0;
       const mode = hasLines ? 'synced' : (d.plain ? 'plain' : 'msg');
+      this.curMode = mode;
       this.setData({
         title: d.track,
         artist: d.artist || '',
@@ -147,7 +150,7 @@ export default {
   tick() {
     try {
       const d = this.snap;
-      if (!d || this.data.mode !== 'synced') return;
+      if (!d || this.curMode !== 'synced') return;
       const idx = currentIndex(d.lines, interpolate(d, this.receivedAt, Date.now()));
       if (idx === this.lastIdx) return;
       this.lastIdx = idx;
